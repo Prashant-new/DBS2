@@ -5,34 +5,34 @@ DROP TABLE IF EXISTS genre;
 DROP TABLE IF EXISTS person;
 DROP SEQUENCE IF EXISTS dbs2_sequence;
 
-CREATE SEQUENCE dbs2_sequnce START WITH 1;
+CREATE SEQUENCE dbs2_sequence START WITH 1;
 
 CREATE TABLE genre (
-    genre_id INTEGER PRIMARY KEY,
+    genreid INTEGER PRIMARY KEY,
     genre VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE person (
-    person_id INTEGER PRIMARY KEY,
-    person_name VARCHAR(100)
+    personid INTEGER PRIMARY KEY,
+    name VARCHAR(100)
 );
 
 CREATE TABLE movie (
-    movie_id INTEGER PRIMARY KEY,
+    movieid INTEGER PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     year INTEGER NOT NULL,
     type VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE movie_character (
-    mov_char_id INTEGER PRIMARY KEY,
-    movie_id INTEGER NOT NULL,
-    person_id INTEGER NOT NULL,
+    movcharid INTEGER PRIMARY KEY,
+    movieid INTEGER NOT NULL,
+    playerid INTEGER NOT NULL,
     character VARCHAR(255) NOT NULL,
     alias VARCHAR(255) NOT NULL,
-    position INTEGER NOT NULL,
-    FOREIGN KEY(movie_id) REFERENCES movie(movie_id),
-    FOREIGN KEY(person_id) REFERENCES person(person_id)
+    pos INTEGER NOT NULL,
+    FOREIGN KEY(movieid) REFERENCES movie(movieid),
+    FOREIGN KEY(playerid) REFERENCES person(personid)
 );
 
 CREATE TABLE movie_genre (
