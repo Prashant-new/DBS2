@@ -36,9 +36,9 @@ CREATE TABLE movie_character (
 );
 
 CREATE TABLE movie_genre (
-    movie_id INTEGER NOT NULL,
-    genre_id INTEGER NOT NULL,
-    PRIMARY KEY (movie_id, genre_id),
-    FOREIGN KEY(movie_id) REFERENCES movie(movie_id),
-    FOREIGN KEY(genre_id) REFERENCES genre(genre_id)
+    movieid INTEGER NOT NULL,
+    genreid INTEGER NOT NULL,
+    PRIMARY KEY (movieid, genreid),
+    FOREIGN KEY(movieid) REFERENCES movie(movieid),
+    FOREIGN KEY(genreid) REFERENCES genre(genreid)
 );
