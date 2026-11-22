@@ -1,9 +1,12 @@
 package de.hsh.dbs2.imdb.persistence;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hsh.dbs2.imdb.util.DBConnection;
 
 public class Person {
 
@@ -37,25 +40,85 @@ public class Person {
 
 	public void insert() throws SQLException {
 		/* TODO */
+		int newID = PersistenceHelper.getId();
+		String sql = "INSERT INTO person (personid, name) VALUES (?, ?)";
+
+		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)){
+			stmt.setInt(1, newID);
+			stmt.setString(2, name);
+			stmt.executeUpdate();
+		}
+
+		personid = newID;
 	}
 
 	public void delete() throws SQLException {
 		/* TODO */
+		if (personId == null) {
+			throw new SQLException("Cannot delete an unsaved person");
+		}
+
+		String sql = "DELETE FROM person WHERE personId = ?";
+
+		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)){
+			stmt.setInt(1,personId);
+			stmt.executeUpdate();
+		}
 	}
 
 	public static Person findById(int personId) throws SQLException, DoesNotExistException {
 		/* TODO */
-		return null;
+		String sql = "Select personid, name FROM person WHERE personid = ?";
+
+		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)){
+			stmt.setInt(1, personId);
+
+			try(ResultSet rs = stmt.executeQuery()){
+				if(rs.next()){
+					return new Person(rs);
+				}
+			}
+		}
+
+		throw new DoesNotExistException("PersonID not found: " + personId);
 	}
 
 	public static List<Person> findByNamePart(String name) throws SQLException {
 		/* TODO */
-		return new ArrayList<>();
+		String sql = """
+						SELECT personid, name
+						FROM person 
+						WHERE name ILIKE ?
+						ORDER BY name, personid
+						"""; 
+		List<Person> people = new ArrayList<>();
+		
+		try(PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)){
+			stmt.setString(1, "%" + name + "%");
+
+			try (ResultSet rs = stmt.executeQuery()){
+				while(rs.next()){
+					people.add(new Person(rs));
+				}
+			}
+		}
+		return people;
 	}
 
 	public static Person findByName(String name) throws SQLException, DoesNotExistException {
 		/* TODO */
-		return null;
+		String sql = "SELECT personid, name FROM person WHERE name = ?";
+
+		try (PreparedStatement stmt =DBConnection.getConnection().prepareStatement(sql)){
+			stmt.setString(1, name);
+
+			try (ResultSet rs = stmt.executeQuery()) {
+				if(rs.next()){
+					return new Person(rs);
+				}
+			}
+		}
+		throw new DoesNotExistException("Person name not found: " + name);
 	}
 
 }
