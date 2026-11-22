@@ -1,4 +1,0 @@
-db.uri=jdbc:postgresql://pgserv.inform.hs-hannover.de:5432/db01
-db.username=
-db.password=
-gui.scale=1.0
