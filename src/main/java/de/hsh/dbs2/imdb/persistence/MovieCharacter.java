@@ -46,15 +46,63 @@ public class MovieCharacter {
 	}
 
 	public void insert() throws SQLException {
-		/* TODO */
+		int newId = PersistenceHelper.getId();
+		String sql = "INSERT INTO movie_character" +
+					"(movcharid, movieid, playerid, character, alias, pos)" +
+					"VALUES (?; ?; ?; ?; ?; ?)";
+
+		try (PreparedStatement stmt = 
+				DBConnection.getConnection().prepareStatement(sql)) {
+			stmt.setInt(1, newId);
+			stmt.setInt(2, movieId);
+			stmt.setInt(3,playerId);
+			stmt.setString(4, character);
+			stmt.setString(5, alias);
+			stmt.setObject(6, pos, java.sql.Types.INTEGER);
+
+
+			if (stmt.executeUpdate() != 1) {
+				throw new SQLException("Could not insert character" + character);
+			}
+			this.movcharId = newId;
+		}
 	}
 	
 	public void delete() throws SQLException {
-		/* TODO */
+		if (movcharId == null) {
+			throw new SQLException("Cannot delete an unsaved character: " + character);
+		}
+
+		String sql = "DELETE FROM movie_character WHERE movcharid = ?";
+
+		try (PreparedStatement stmt = 
+				DBConnection.getConnection().prepareStatement(sql)) {
+			stmt.setInt(1, movcharId);
+
+			if (stmt.executeUpdate() != 1) {
+				throw new SQLException("No movie character found for ID" + movcharId);
+			}
+		}
 	}
 
 	public static List<MovieCharacter> findByMovieId(int movieid) throws SQLException {
-		/* TODO */
-		return null;		
+		String sql = "SELECT movcharid, movieid, playerid, character, alias, pos" +
+					"FROM movie_character" +
+					"WHERE movieid = ?";
+
+		List<MovieCharacter> characters = new LinkedList<>();
+
+		try (PreparedStatement stmt = 
+				DBConnection.getConnection().prepareStatement(sql)) {
+			stmt.setInt(1, movieid);
+
+			try (ResultSet rs = stmt.executeQuery()) {
+				while (rs.next()) {
+					characters.add(new MovieCharacter(rs));
+				}
+			}
+
+		}	
+		return characters;		
 	}
 }
