@@ -23,7 +23,7 @@ public class MovieGenre {
 	}
 
 	public void insert() throws SQLException {
-		String sql = "INSERT INTO movie_genre WHERE movieid = ? AND genreid = ?";
+		String sql = "INSERT INTO movie_genre (movieid, genreid) VALUES (?, ?)";
 
 		try (PreparedStatement stmt = 
 				DBConnection.getConnection().prepareStatement(sql)) {

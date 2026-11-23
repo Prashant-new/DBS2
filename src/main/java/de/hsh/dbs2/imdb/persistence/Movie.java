@@ -62,13 +62,13 @@ public class Movie {
 	public void insert() throws SQLException {
 		/* TODO */
 		int newId = PersistenceHelper.getId();
-		String sql = "INSERT INTO movie (movieid, title, year) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO movie (movieid, title, year, type) VALUES (?, ?, ?, ?)";
 
 		try(PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)){
 			stmt.setInt(1, newId);
-			stmt.setString(2, getTitle());
-			stmt.setInt(3, getYear());
-			stmt.setString(4, getType());
+			stmt.setString(2, title);
+			stmt.setInt(3, year);
+			stmt.setString(4, type);
 
 			if(stmt.executeUpdate() != 1){
 				throw new SQLException("Could not insert movie: " + title); 
@@ -121,7 +121,7 @@ public class Movie {
 		String sql = """
 						SELECT movieid, title, year, type
 						FROM movie
-						WHERE title = ?
+						WHERE strpos(lower(title), lower(?)) > 0
 						ORDER BY movieid
 						""";
 		List<Movie> movies = new ArrayList<>();
@@ -141,9 +141,7 @@ public class Movie {
 
 	public static Movie findById(int movieId) throws SQLException, DoesNotExistException {
 		/* TODO	*/
-		String sql = "SELECT movieid, title, year, type" +
-					"FROM movie" + 
-					"WHERE movieid = ?";
+		String sql = "SELECT movieid, title, year, type FROM movie WHERE movieid = ?";
 			
 		try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)){
 			stmt.setInt(1, movieId);

@@ -49,7 +49,7 @@ public class MovieCharacter {
 		int newId = PersistenceHelper.getId();
 		String sql = "INSERT INTO movie_character" +
 					"(movcharid, movieid, playerid, character, alias, pos)" +
-					"VALUES (?; ?; ?; ?; ?; ?)";
+					"VALUES (?, ?, ?, ?, ?, ?)";
 
 		try (PreparedStatement stmt = 
 				DBConnection.getConnection().prepareStatement(sql)) {
@@ -86,9 +86,12 @@ public class MovieCharacter {
 	}
 
 	public static List<MovieCharacter> findByMovieId(int movieid) throws SQLException {
-		String sql = "SELECT movcharid, movieid, playerid, character, alias, pos" +
-					"FROM movie_character" +
-					"WHERE movieid = ?";
+		String sql = """
+						SELECT movcharid, movieid, playerid, character, alias, pos 
+						FROM movie_character 
+						WHERE movieid = ?
+						ORDER BY pos NULLS LAST, movcharid;
+						""";
 
 		List<MovieCharacter> characters = new LinkedList<>();
 

@@ -49,7 +49,7 @@ public class Person {
 			stmt.executeUpdate();
 		}
 
-		personid = newID;
+		personId = newID;
 	}
 
 	public void delete() throws SQLException {
