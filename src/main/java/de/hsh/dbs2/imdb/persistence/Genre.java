@@ -88,11 +88,11 @@ public class Genre {
 	}
 	
 	public static List<Genre> findByMovieId(int movieId) throws SQLException {
-		String sql = "SELECT g genreid, g.genre" +
-					"FROM genre g" +
-					"JOIN movie_genre mg ON mg.genreid = g.genreid" +
-					"WHERE mg.movieid = ?" +
-					"ORDER BY g.genre, g.genreid";
+		String sql = "SELECT g.genreid, g.genre " +
+					"FROM genre g " +
+					"JOIN movie_genre mg ON mg.genreid = g.genreid " +
+					"WHERE mg.movieid = ? " +
+					"ORDER BY g.genre, g.genreid ";
 					
 		List<Genre> genres = new ArrayList<>();
 

@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: de.hsh.dbs2.imdb.persistence.MovieTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.465 s -- in de.hsh.dbs2.imdb.persistence.MovieTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.476 s -- in de.hsh.dbs2.imdb.persistence.MovieTest

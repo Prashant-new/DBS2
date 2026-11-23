@@ -3,6 +3,8 @@ package de.hsh.dbs2.imdb.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hsh.dbs2.imdb.persistence.Genre;
+
 public class GenreManager {
 
 	/**
@@ -13,7 +15,13 @@ public class GenreManager {
 	 */
 	public List<String> getGenres() throws Exception {
 		/* TODO */
-		return new ArrayList<>();
+		List<String> names = new ArrayList<>();
+
+		for(Genre genre : Genre.findAll()){
+			names.add(genre.getGenre());
+		}
+
+		return names;
 	}
 
 

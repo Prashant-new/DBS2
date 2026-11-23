@@ -3,6 +3,12 @@ package de.hsh.dbs2.imdb.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hsh.dbs2.imdb.persistence.Person;
+import de.hsh.dbs2.imdb.util.DBConnection;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
 public class PersonManager {
 
 	/**
@@ -13,7 +19,21 @@ public class PersonManager {
 	 */
 	public List<String> getPersonList(String name) throws Exception {
 		/* TODO */
-		return new ArrayList<>();
+		Connection connection = DBConnection.getConnection();
+
+		try {
+			List<String> names = new ArrayList<>();
+
+			for (Person person : Person.findByNamePart(name)){
+				names.add(person.getName());
+			}
+
+			connection.commit();
+			return names;
+		} catch (Exception failure){
+			rollback(connection, failure);
+			throw failure;
+		}
 	}
 
 	/**
@@ -25,6 +45,25 @@ public class PersonManager {
 	 */
 	public int getPerson(String name) throws Exception {
 		/* TODO */
-		throw new Exception("Person not found");
+		Connection connection =DBConnection.getConnection();
+
+		try {
+			int personId =Person.findByName(name).getPersonId();
+
+			connection.commit();
+			return personId;
+		} catch (Exception failure){
+			rollback(connection, failure);
+			throw failure;
+		}
+		
+	}
+
+	private void rollback(Connection connection, Exception failure) {
+    	try {
+        	connection.rollback();
+    	}catch (SQLException rollbackFailure) {
+        	failure.addSuppressed(rollbackFailure);
+    	}
 	}
 }
